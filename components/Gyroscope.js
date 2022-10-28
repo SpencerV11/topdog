@@ -10,15 +10,11 @@ export function GyroscopeLogic() {
   });
   const [subscription, setSubscription] = useState(null);
 
-  const _slow = () => {
-    Gyroscope.setUpdateInterval(2000);
-  };
-
   const _subscribe = () => {
     setSubscription(
       Gyroscope.addListener(gyroscopeData => {
           if (Math.abs(gyroscopeData.x) > 0.4 && Math.abs(gyroscopeData.y) > 0.4 && Math.abs(gyroscopeData.z) > 0.4){
-            setData(gyroscopeData);
+            console.log(gyroscopeData)
           }
       })
     );
@@ -30,6 +26,7 @@ export function GyroscopeLogic() {
   };
 
   useEffect(() => {
+    Gyroscope.setUpdateInterval(1000);
     _subscribe();
     return () => _unsubscribe();
   }, []);
@@ -39,15 +36,10 @@ export function GyroscopeLogic() {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Gyroscope:</Text>
-      <Text style={styles.text}>
-        x: {round(x)} y: {round(y)} z: {round(z)}
-      </Text>
+
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={subscription ? _unsubscribe : _subscribe} style={styles.button}>
           <Text>{subscription ? 'On' : 'Off'}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={_slow} style={[styles.button, styles.middleButton]}>
-          <Text>Slow</Text>
         </TouchableOpacity>
       </View>
     </View>
