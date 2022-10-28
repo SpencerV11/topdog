@@ -14,14 +14,12 @@ export function GyroscopeLogic() {
     Gyroscope.setUpdateInterval(2000);
   };
 
-  const _fast = () => {
-    Gyroscope.setUpdateInterval(16);
-  };
-
   const _subscribe = () => {
     setSubscription(
       Gyroscope.addListener(gyroscopeData => {
-        setData(gyroscopeData);
+          if (Math.abs(gyroscopeData.x) > 0.4 && Math.abs(gyroscopeData.y) > 0.4 && Math.abs(gyroscopeData.z) > 0.4){
+            setData(gyroscopeData);
+          }
       })
     );
   };
@@ -37,6 +35,7 @@ export function GyroscopeLogic() {
   }, []);
 
   const { x, y, z } = data;
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Gyroscope:</Text>
@@ -49,9 +48,6 @@ export function GyroscopeLogic() {
         </TouchableOpacity>
         <TouchableOpacity onPress={_slow} style={[styles.button, styles.middleButton]}>
           <Text>Slow</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={_fast} style={styles.button}>
-          <Text>Fast</Text>
         </TouchableOpacity>
       </View>
     </View>
